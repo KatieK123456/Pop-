@@ -1,0 +1,225 @@
+:root {
+  --cream: #f7f2ea;
+  --white: #ffffff;
+  --coral: #eb9979;
+  --coral-dark: #ce6345;
+  --pink-logo: #d98a97;
+  --pink-bg: #fbe1e5;
+  --pink-accent: #e8607e;
+  --text-dark: #1f2430;
+  --text-gray: #7a7a7a;
+  --border-light: #eee6da;
+  --blue-tab: #6f8fb0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--text-dark);
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.pop-logo {
+  font-family: "Playfair Display", Georgia, serif;
+  color: var(--pink-logo);
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1;
+  margin: 0;
+}
+
+.pop-logo-sub {
+  font-size: 0.65rem;
+  color: var(--text-gray);
+  margin-top: 2px;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--white);
+  padding: 0.85rem 2rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-decoration: none;
+  color: var(--text-gray);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.nav-link.active {
+  color: var(--coral);
+  font-weight: 600;
+}
+
+.nav-avatar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--pink-bg);
+  border-radius: 999px;
+  padding: 0.3rem 0.9rem 0.3rem 0.3rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.avatar-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--pink-bg);
+  color: var(--coral);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.avatar-circle.large {
+  width: 64px;
+  height: 64px;
+  font-size: 1.1rem;
+  border-radius: 16px;
+}
+
+.page-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.auth-card {
+  max-width: 380px;
+  margin: 3rem auto;
+  background: var(--white);
+  padding: 2.25rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+}
+
+.auth-card h2 {
+  margin-top: 0;
+  font-family: "Playfair Display", Georgia, serif;
+  color: var(--text-dark);
+}
+
+.pop-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: var(--cream);
+}
+
+.pop-input:focus {
+  outline: 2px solid var(--pink-accent);
+  outline-offset: 1px;
+}
+
+.btn-coral {
+  background: var(--coral);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.btn-coral:hover {
+  background: var(--coral-dark);
+}
+
+.btn-outline {
+  background: white;
+  color: var(--text-dark);
+  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  padding: 0.6rem 1.3rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.error-text {
+  color: var(--coral-dark);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.profile-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 1.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.profile-left {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.profile-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.profile-handle {
+  color: var(--text-gray);
+  font-size: 0.85rem;
+  margin: 2px 0;
+}
+
+.profile-bio {
+  font-size: 0.85rem;
+  color: var(--text-gray);
+}
+
+.profile-tabs {
+  display: flex;
+  gap: 2rem;
+  margin: 1.75rem 0 1rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.profile-tab {
+  background: none;
+  border: none;
+  padding-bottom: 0.6rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-gray);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.profile-tab.active {
+  color: var(--text-dark);
+  border-bottom-color: var(--coral);
+}
