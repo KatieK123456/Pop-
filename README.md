@@ -48,12 +48,9 @@ git remote add origin <your GitHub repo URL>
 git push -u origin main
 ```
 
-## What's next (after this works)
+## What's next
 - Build the Feed to actually pull listings from the `listings` table
 - Build a "create listing" form that inserts into `listings`
 - Build out the Profile tabs to query `listings`, `wishlist`, and `transactions`
   for the current user
 
-Note: passwords are stored in plain text in this starter for simplicity, per your
-project's current scope — this is fine for a class project but never do this in
-anything real.
