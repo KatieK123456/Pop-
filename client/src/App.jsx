@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route, Link, Navigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import Signup from "./pages/Signup.jsx";
 import Login from "./pages/Login.jsx";
 import Feed from "./pages/Feed.jsx";
@@ -10,9 +10,15 @@ function initials(name) {
   return name.slice(0, 2).toUpperCase();
 }
 
-function NavBar({ user }) {
+function NavBar({ user, onLogout }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const isActive = (path) => location.pathname === path;
+
+  function handleLogout() {
+    onLogout();
+    navigate("/login");
+  }
 
   return (
     <nav className="navbar">
@@ -23,22 +29,27 @@ function NavBar({ user }) {
 
       <div className="nav-links">
         <Link to="/" className={`nav-link ${isActive("/") ? "active" : ""}`}>
-          Home
+        Home
         </Link>
         <Link to="/new-listing" className={`nav-link ${isActive("/new-listing") ? "active" : ""}`}>
           ⊕ Post
         </Link>
         <Link to="/profile" className={`nav-link ${isActive("/profile") ? "active" : ""}`}>
-          Profile
+        Profile
         </Link>
       </div>
 
-      <div>
+      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
         {user ? (
-          <div className="nav-avatar">
-            <span className="avatar-circle">{initials(user.username)}</span>
-            @{user.username}
-          </div>
+          <>
+            <div className="nav-avatar">
+              <span className="avatar-circle">{initials(user.username)}</span>
+              @{user.username}
+            </div>
+            <button onClick={handleLogout} className="btn-outline" style={{ padding: "0.4rem 1rem", fontSize: "0.85rem" }}>
+              Log out
+            </button>
+          </>
         ) : (
           <div style={{ display: "flex", gap: "0.75rem" }}>
             <Link to="/login" className="nav-link">Login</Link>
@@ -55,7 +66,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <NavBar user={user} />
+      <NavBar user={user} onLogout={() => setUser(null)} />
 
       <div className="page-wrap">
         <Routes>
