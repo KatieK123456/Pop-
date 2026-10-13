@@ -4,6 +4,7 @@ import Signup from "./pages/Signup.jsx";
 import Login from "./pages/Login.jsx";
 import Feed from "./pages/Feed.jsx";
 import Profile from "./pages/Profile.jsx";
+import NewListing from "./pages/NewListing.jsx";
 
 function initials(name) {
   if (!name) return "";
@@ -29,13 +30,13 @@ function NavBar({ user, onLogout }) {
 
       <div className="nav-links">
         <Link to="/" className={`nav-link ${isActive("/") ? "active" : ""}`}>
-        Home
+          🏠 Home
         </Link>
         <Link to="/new-listing" className={`nav-link ${isActive("/new-listing") ? "active" : ""}`}>
           ⊕ Post
         </Link>
         <Link to="/profile" className={`nav-link ${isActive("/profile") ? "active" : ""}`}>
-        Profile
+          👤 Profile
         </Link>
       </div>
 
@@ -73,6 +74,10 @@ export default function App() {
           <Route path="/" element={<Feed />} />
           <Route path="/signup" element={<Signup onSignup={setUser} />} />
           <Route path="/login" element={<Login onLogin={setUser} />} />
+          <Route
+            path="/new-listing"
+            element={user ? <NewListing user={user} /> : <Navigate to="/login" />}
+          />
           <Route
             path="/profile"
             element={user ? <Profile user={user} /> : <Navigate to="/login" />}

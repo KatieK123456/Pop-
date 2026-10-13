@@ -1,8 +1,8 @@
 :root {
   --cream: #f7f2ea;
   --white: #ffffff;
-  --coral: #eb9979;
-  --coral-dark: #ce6345;
+  --coral: #e8613c;
+  --coral-dark: #d9502c;
   --pink-logo: #d98a97;
   --pink-bg: #fbe1e5;
   --pink-accent: #e8607e;
@@ -222,4 +222,114 @@ body {
 .profile-tab.active {
   color: var(--text-dark);
   border-bottom-color: var(--coral);
+}
+
+/* ---- Feed and listings ---- */
+.page-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2rem;
+  margin: 0 0 0.25rem;
+}
+
+.page-subtitle {
+  color: var(--text-gray);
+  font-size: 0.9rem;
+  margin: 0 0 1.5rem;
+}
+
+.feed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.listing-card {
+  background: var(--white);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+}
+
+.listing-seller {
+  margin: 0;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.7rem;
+  color: var(--text-gray);
+}
+
+.listing-photo {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+.listing-info {
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.listing-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.listing-price {
+  font-weight: 700;
+  color: #425b72;
+}
+
+.listing-meta {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-gray);
+}
+
+.tag-buy,
+.tag-rent {
+  align-self: flex-start;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+}
+
+.tag-buy {
+  background: var(--pink-bg);
+  color: var(--coral);
+}
+
+.tag-rent {
+  background: #dff1e1;
+  color: #2d7a3e;
+}
+
+/* ---- New listing form ---- */
+.form-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.form-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 0.4rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }

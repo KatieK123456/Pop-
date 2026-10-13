@@ -1,5 +1,6 @@
 -- Pop database schema
--- Run with: psql pop_db -f schema.sql
+-- WARNING: running this file DELETES all existing data (the DROP TABLE lines).
+-- Only use it to build a brand new database: psql pop_db -f schema.sql
 
 DROP TABLE IF EXISTS transactions;
 DROP TABLE IF EXISTS wishlist;
@@ -17,6 +18,8 @@ CREATE TABLE users (
 CREATE TABLE listings (
   id SERIAL PRIMARY KEY,
   seller_id INTEGER NOT NULL REFERENCES users(id),
+  title TEXT,
+  description TEXT,
   category TEXT NOT NULL,
   size TEXT NOT NULL,
   price NUMERIC(10, 2) NOT NULL,
