@@ -27,6 +27,7 @@ CREATE TABLE listings (
   listing_type TEXT NOT NULL CHECK (listing_type IN ('sell', 'rent')),
   status TEXT NOT NULL DEFAULT 'available' CHECK (status IN ('available', 'pending', 'unavailable')),
   photo_url TEXT,
+  photo_urls TEXT[] DEFAULT '{}',
   created_at TIMESTAMP DEFAULT NOW()
 );
 

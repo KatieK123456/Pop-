@@ -3,6 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
 import listingRoutes from "./routes/listings.js";
+import wishlistRoutes from "./routes/wishlist.js";
+import uploadRoutes from "./routes/upload.js";
 
 dotenv.config();
 
@@ -12,6 +14,8 @@ app.use(express.json());
 
 app.use("/api", authRoutes);
 app.use("/api", listingRoutes);
+app.use("/api", wishlistRoutes);
+app.use("/api", uploadRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "Pop server is running" });
