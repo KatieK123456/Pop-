@@ -25,7 +25,7 @@ CREATE TABLE listings (
   price NUMERIC(10, 2) NOT NULL,
   condition TEXT NOT NULL,
   listing_type TEXT NOT NULL CHECK (listing_type IN ('sell', 'rent')),
-  status TEXT NOT NULL DEFAULT 'available' CHECK (status IN ('available', 'pending', 'unavailable')),
+  status TEXT NOT NULL DEFAULT 'available' CHECK (status IN ('available', 'pending', 'unavailable', 'removed')),
   photo_url TEXT,
   photo_urls TEXT[] DEFAULT '{}',
   created_at TIMESTAMP DEFAULT NOW()
@@ -44,5 +44,6 @@ CREATE TABLE transactions (
   seller_id INTEGER NOT NULL REFERENCES users(id),
   listing_id INTEGER NOT NULL REFERENCES listings(id),
   type TEXT NOT NULL CHECK (type IN ('buy', 'rent')),
+  price NUMERIC(10, 2),
   date TIMESTAMP DEFAULT NOW()
 );

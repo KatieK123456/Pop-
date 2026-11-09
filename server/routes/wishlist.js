@@ -22,6 +22,12 @@ router.post("/wishlist/toggle", async (req, res) => {
       return res.json({ liked: false });
     }
 
+    // Unliking always works, but you can't newly like a listing the seller removed
+    const listing = await pool.query("SELECT status FROM listings WHERE id = $1", [listing_id]);
+    if (listing.rows.length === 0 || listing.rows[0].status === "removed") {
+      return res.status(404).json({ error: "This listing is no longer available." });
+    }
+
     await pool.query("INSERT INTO wishlist (user_id, listing_id) VALUES ($1, $2)", [user_id, listing_id]);
     res.json({ liked: true });
   } catch (err) {

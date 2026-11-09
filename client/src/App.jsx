@@ -6,10 +6,18 @@ import Feed from "./pages/Feed.jsx";
 import Profile from "./pages/Profile.jsx";
 import NewListing from "./pages/NewListing.jsx";
 import EditListing from "./pages/EditListing.jsx";
+import ListingDetail from "./pages/ListingDetail.jsx";
+import UserProfile from "./pages/UserProfile.jsx";
+import { initials } from "./format.js";
+import "./checkpoint3.css";
 
-function initials(name) {
-  if (!name) return "";
-  return name.slice(0, 2).toUpperCase();
+// Remember who is logged in, so refreshing the page doesn't log you out
+function loadSavedUser() {
+  try {
+    return JSON.parse(localStorage.getItem("pop-user")) || null;
+  } catch {
+    return null;
+  }
 }
 
 function NavBar({ user, onLogout }) {
@@ -31,13 +39,13 @@ function NavBar({ user, onLogout }) {
 
       <div className="nav-links">
         <Link to="/" className={`nav-link ${isActive("/") ? "active" : ""}`}>
-          Home
+          🏠 Home
         </Link>
         <Link to="/new-listing" className={`nav-link ${isActive("/new-listing") ? "active" : ""}`}>
           ⊕ Post
         </Link>
         <Link to="/profile" className={`nav-link ${isActive("/profile") ? "active" : ""}`}>
-          Profile
+          👤 Profile
         </Link>
       </div>
 
@@ -64,7 +72,17 @@ function NavBar({ user, onLogout }) {
 }
 
 export default function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUserState] = useState(loadSavedUser);
+
+  function setUser(next) {
+    setUserState(next);
+    try {
+      if (next) localStorage.setItem("pop-user", JSON.stringify(next));
+      else localStorage.removeItem("pop-user");
+    } catch {
+      // If the browser blocks storage, the app still works; you just log in again after a refresh
+    }
+  }
 
   return (
     <BrowserRouter>
@@ -85,8 +103,10 @@ export default function App() {
           />
           <Route
             path="/profile"
-            element={user ? <Profile user={user} /> : <Navigate to="/login" />}
+            element={user ? <Profile user={user} onUserUpdate={setUser} /> : <Navigate to="/login" />}
           />
+          <Route path="/listings/:id" element={<ListingDetail user={user} />} />
+          <Route path="/users/:id" element={<UserProfile user={user} />} />
         </Routes>
       </div>
     </BrowserRouter>

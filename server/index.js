@@ -5,6 +5,8 @@ import authRoutes from "./routes/auth.js";
 import listingRoutes from "./routes/listings.js";
 import wishlistRoutes from "./routes/wishlist.js";
 import uploadRoutes from "./routes/upload.js";
+import transactionRoutes from "./routes/transactions.js";
+import userRoutes from "./routes/users.js";
 
 dotenv.config();
 
@@ -16,6 +18,8 @@ app.use("/api", authRoutes);
 app.use("/api", listingRoutes);
 app.use("/api", wishlistRoutes);
 app.use("/api", uploadRoutes);
+app.use("/api", transactionRoutes);
+app.use("/api", userRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "Pop server is running" });

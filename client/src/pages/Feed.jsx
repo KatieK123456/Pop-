@@ -108,7 +108,12 @@ export default function Feed({ user }) {
 
       <div className="feed-grid">
         {listings.map((l) => (
-          <ListingCard key={l.id} listing={l} onToggleLike={handleToggleLike} />
+          <ListingCard
+            key={l.id}
+            listing={l}
+            onOpen={() => navigate(`/listings/${l.id}`)}
+            onToggleLike={handleToggleLike}
+          />
         ))}
       </div>
     </div>

@@ -79,8 +79,10 @@ router.get("/listings", async (req, res) => {
   }
 });
 
-// GET /api/listings/:id - one listing (used to fill in the edit form)
+// GET /api/listings/:id?user_id=2 - one listing (detail page and edit form)
+// With user_id: also says whether they liked it, and shows the sale if they were the buyer or seller.
 router.get("/listings/:id", async (req, res) => {
+  const { user_id } = req.query;
   try {
     const result = await pool.query(
       `SELECT ${LISTING_COLUMNS}
@@ -92,7 +94,34 @@ router.get("/listings/:id", async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Listing not found." });
     }
-    res.json({ listing: result.rows[0] });
+    const listing = result.rows[0];
+    listing.liked = false;
+    let transaction = null;
+
+    if (user_id) {
+      const liked = await pool.query(
+        "SELECT 1 FROM wishlist WHERE user_id = $1 AND listing_id = $2",
+        [user_id, listing.id]
+      );
+      listing.liked = liked.rows.length > 0;
+
+      // Only the buyer and the seller get to see who bought it
+      const sale = await pool.query(
+        `SELECT transactions.type, transactions.date, transactions.buyer_id,
+                COALESCE(transactions.price, $3) AS price,
+                buyers.username AS buyer_username, buyers.email AS buyer_email
+         FROM transactions
+         JOIN users AS buyers ON transactions.buyer_id = buyers.id
+         WHERE transactions.listing_id = $1
+           AND (transactions.buyer_id = $2 OR transactions.seller_id = $2)
+         ORDER BY transactions.date DESC
+         LIMIT 1`,
+        [listing.id, user_id, listing.price]
+      );
+      transaction = sale.rows[0] || null;
+    }
+
+    res.json({ listing, transaction });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Could not load that listing." });
@@ -132,12 +161,15 @@ router.put("/listings/:id", async (req, res) => {
   if (problem) return res.status(400).json({ error: problem });
 
   try {
-    const existing = await pool.query("SELECT seller_id FROM listings WHERE id = $1", [req.params.id]);
+    const existing = await pool.query("SELECT seller_id, status FROM listings WHERE id = $1", [req.params.id]);
     if (existing.rows.length === 0) {
       return res.status(404).json({ error: "Listing not found." });
     }
     if (existing.rows[0].seller_id !== Number(seller_id)) {
       return res.status(403).json({ error: "You can only edit your own listings." });
+    }
+    if (existing.rows[0].status !== "available") {
+      return res.status(400).json({ error: "This listing is no longer available, so it can't be edited." });
     }
 
     await pool.query(
@@ -154,27 +186,28 @@ router.put("/listings/:id", async (req, res) => {
   }
 });
 
-// DELETE /api/listings/:id?seller_id=1 - delete a listing (only its seller can)
+// DELETE /api/listings/:id?seller_id=1 - remove a listing (only its seller can)
+// This is a "soft delete": the listing is marked 'removed' instead of erased, so it leaves
+// the feed and the seller's profile, but anyone who liked it still sees it as Not available.
 router.delete("/listings/:id", async (req, res) => {
   const { seller_id } = req.query;
 
   try {
-    const existing = await pool.query("SELECT seller_id FROM listings WHERE id = $1", [req.params.id]);
-    if (existing.rows.length === 0) {
+    const existing = await pool.query("SELECT seller_id, status FROM listings WHERE id = $1", [req.params.id]);
+    if (existing.rows.length === 0 || existing.rows[0].status === "removed") {
       return res.status(404).json({ error: "Listing not found." });
     }
     if (existing.rows[0].seller_id !== Number(seller_id)) {
       return res.status(403).json({ error: "You can only delete your own listings." });
     }
+    // A bought or rented item is part of someone's Closet, so it stays as is
+    if (existing.rows[0].status !== "available") {
+      return res.status(400).json({ error: "This item has already been bought or rented, so it can't be deleted." });
+    }
 
-    // Remove it from everyone's wishlist first, then delete the listing itself
-    await pool.query("DELETE FROM wishlist WHERE listing_id = $1", [req.params.id]);
-    await pool.query("DELETE FROM listings WHERE id = $1", [req.params.id]);
+    await pool.query("UPDATE listings SET status = 'removed' WHERE id = $1", [req.params.id]);
     res.json({ ok: true });
   } catch (err) {
-    if (err.code === "23503") {
-      return res.status(400).json({ error: "This listing has transaction history, so it can't be deleted." });
-    }
     console.error(err);
     res.status(500).json({ error: "Something went wrong deleting the listing." });
   }
